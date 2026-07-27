@@ -1,57 +1,50 @@
 import argparse
-
-import io
 from pathlib import Path
 
-from PIL import Image
-
+import utils.generate as generate
 import utils.retrieve as retrieve
 import utils.toagent as toagent
-import utils.generate as generate
 
 
-if __name__ == "__main__":
-    # Receive user inputs for image and prompt file directory paths
-    parser = argparse.ArgumentParser()
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Build a Codex conversion manifest for a folder of images."
+    )
 
-    parser.add_argument('--images', type=str, default="./assets/images")
-    parser.add_argument('--prompt', type=str, default="./assets/prompt.txt")
-    parser.add_argument('--imgformats', nargs='+', type=str, default=['JPG','PNG','JPEG'])
+    parser.add_argument("--images", type=str, default="./assets/images")
+    parser.add_argument("--prompt", type=str, default="./assets/prompt.txt")
+    parser.add_argument("--imgformats", nargs="+", type=str, default=["JPG", "PNG", "JPEG"])
 
-    args = parser.parse_args()
-    kwarg_dict = vars(args)
+    return parser.parse_args()
 
-    path_img = Path(kwarg_dict['images'])
-    prompt_file = Path(kwarg_dict['prompt'])
-    img_formats = [x.lower() for x in kwarg_dict['imgeformats']]
 
-    # Load images
+def main() -> None:
+    args = parse_args()
+
+    path_img = Path(args.images).expanduser().resolve()
+    prompt_file = Path(args.prompt).expanduser().resolve()
+    img_formats = [x.lower().lstrip(".") for x in args.imgformats]
+
     image_file_list = retrieve.retrieve_file_lists(path_img, img_formats)
 
-    # Load prompt
-    with prompt_file.open(mode='r') as f:
-        prompt = f.read()
+    prompt = prompt_file.read_text(encoding="utf-8").strip()
 
     print(f"User prompt: {prompt}")
 
-    # Make the new image folder
-    save_dir = retrieve.make_new_folder(path_img)
+    try:
+        save_dir = retrieve.make_new_folder(path_img)
+    except FileExistsError as exc:
+        raise SystemExit(f"Error: {exc}") from exc
+    entries = generate.build_manifest_entries(image_file_list, path_img, save_dir, prompt)
+    manifest_path = save_dir / toagent.DEFAULT_MANIFEST_NAME
+    toagent.convert_by_agent(entries, manifest_path)
 
-    # Generate converted image for each image
-    for img_fp in image_file_list:
-        ## Retrieve image in binary format bytes
-        img_io = retrieve(img_fp)
-        img_format = img_fp.name.strip().split('.')[-1]
+    print(f"Found {len(entries)} image(s).")
+    print(f"Created converted output folder: {save_dir}")
+    print(f"Wrote Codex conversion manifest: {manifest_path}")
+    print(f"Next step: ask Codex to use $batch-image-converter with {manifest_path}")
 
-        prompt = generate.make_prompt(img_io, img_format, prompt)
 
-        ## Interact with agent
-        img_converted_io = generate.convert_by_agent(prompt)
-        img_converted = Image.open(img_converted_io)
-
-        ## Save image
-        image_path_relative = img_fp.relative_to(path_img)
-        save_path = save_dir / image_path_relative
-        generate.save_image(img_converted, img_format, save_path)
-
+if __name__ == "__main__":
+    main()
 

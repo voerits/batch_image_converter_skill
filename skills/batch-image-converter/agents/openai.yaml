@@ -1,0 +1,4 @@
+interface:
+  display_name: "Batch Image Converter"
+  short_description: "Convert image folders with mirrored outputs"
+  default_prompt: "Use $batch-image-converter to convert every image in this folder while preserving its directory structure."
