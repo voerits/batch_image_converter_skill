@@ -18,9 +18,11 @@ This repository provides a Codex skill and helper scripts for preparing and runn
 
 Very easy! Prompt in your Codex terminal:
 
-*Load the skill at ./skills/batch-image-converter as $batch-image-converter. Convert the images in [path-to-image-folder] using the instruction in [path-to-prompt-file]. (Start with a test batch of 3 images, then process the remaining images after the test outputs have been checked.)*
+> *Load the skill at ./skills/batch-image-converter as $batch-image-converter. Convert the images in [path-to-image-folder] using the instruction in [path-to-prompt-file].*
 
-And let your Codex run it!
+And let your Codex run it! (^^) 
+
+P.S., You can also make the prompt a little more complex, eg., by demanding a small-size test before formally running over the whole bunch, such as "*Start with a test batch of 3 images, then process the remaining images after the test outputs have been checked.*"
 
 ### Supported image formats
 
@@ -36,10 +38,13 @@ Additional extensions can be supplied to main.py through --imgformats, although 
 
 ### Requirements
 
--Python 3.9 or later
--Pillow
--The Codex CLI, installed and authenticated
--A Codex environment capable of editing or generating image files and writing them to the workspace
+- Python 3.9 or later
+
+- Pillow
+
+- The Codex CLI, installed and authenticated
+
+- A Codex environment capable of editing or generating image files and writing them to the workspace
 
 Install the Python dependency:
 
@@ -56,9 +61,9 @@ cd batch_image_converter_skill
 
 Prepare:
 
-A folder containing the source images.
+- A folder containing the source images.
 
-A UTF-8 text file containing the conversion instruction.
+- A UTF-8 text file containing the conversion instruction.
 
 Then ask Codex to run the skill from the repository root. Remember to provide your image folder path and prompt text file path.
 
@@ -72,7 +77,8 @@ Given a folder containing images, it generates new images which have converted t
 
 eg. 
 
-    original folder:
+original folder:
+
     image_folder/
         |____subfolder_1/
             |____subsubfolder_1/
@@ -90,7 +96,8 @@ eg.
                     |____image6.png
             |____image7.jpg
 
-    new folder:
+new folder:
+
     image_folder_converted/
         |____subfolder_1/
             |____subsubfolder_1/
