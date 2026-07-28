@@ -18,7 +18,7 @@ This repository provides a Codex skill and helper scripts for preparing and runn
 
 Very easy! Prompt in your Codex terminal:
 
-*Load the skill in ./skills/batch-image-converter, run this batch image converter. The image folder is [Path-to-images]. The conversion's requirement text file is [Path-to-conversion-requirement-text].*
+*Load the skill at ./skills/batch-image-converter as $batch-image-converter. Convert the images in [path-to-image-folder] using the instruction in [path-to-prompt-file]. (Start with a test batch of 3 images, then process the remaining images after the test outputs have been checked.)*
 
 And let your Codex run it!
 
