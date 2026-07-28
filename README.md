@@ -34,7 +34,7 @@ By default, the project processes:
 .png
 ```
 
-Additional extensions can be supplied to 'main.py' through '--imgformats', although the current image-handling utilities are designed around JPEG and PNG files.
+Additional extensions can be supplied to `main.py` through `--imgformats`, although the current image-handling utilities are designed around JPEG and PNG files.
 
 ### Requirements
 
