@@ -1,12 +1,18 @@
-# A skill for converting image style in batches.
+# Batch Image Converter Skill for Codex
+
+Convert a folder of images with one shared visual instruction while preserving the original filenames and directory structure.
+
+This repository provides a Codex skill and helper scripts for preparing and running batch image transformations. Each supported image is processed individually, so the same instruction can be applied across an entire nested folder tree.
 
 ### Features
 
-1. Convert images to whatever style you want.
+1. Apply one style or editing instruction, or more complex instructions, to a batch of images.
 
-2. Conversion is in a batch, and it preserves the original file directory structure as your input image directories.
+2. Preserve each image's relative path and filename.
 
-3. Very easy to set off. A simple sentence in your Codex terminal and everything is done.
+3. Ignore non-image files instead of copying them into the output folder.
+
+4. Very easy to set off. A simple sentence in your Codex terminal and everything is done.
 
 ### How to use it
 
@@ -16,6 +22,47 @@ Very easy! Prompt in your Codex terminal:
 
 And let your Codex run it!
 
+### Supported image formats
+
+By default, the project processes:
+
+```
+.jpg
+.jpeg
+.png
+```
+
+Additional extensions can be supplied to main.py through --imgformats, although the current image-handling utilities are designed around JPEG and PNG files.
+
+### Requirements
+
+-Python 3.9 or later
+-Pillow
+-The Codex CLI, installed and authenticated
+-A Codex environment capable of editing or generating image files and writing them to the workspace
+
+Install the Python dependency:
+
+```python -m pip install Pillow```
+
+### Quick start
+
+Clone the repository:
+
+```
+git clone https://github.com/voerits/batch_image_converter_skill.git
+cd batch_image_converter_skill
+```
+
+Prepare:
+
+A folder containing the source images.
+
+A UTF-8 text file containing the conversion instruction.
+
+Then ask Codex to run the skill from the repository root. Remember to provide your image folder path and prompt text file path.
+
+For command-line examples, manual execution, reruns, manifest details, and troubleshooting, see **usage.md**.
 
 ### What it does
 
@@ -75,6 +122,27 @@ eg.:
     7. Has a size of 1280 x 1280 pixels.
 
 
-### Note
+### Notes
 
-since the image conversion is executed by your agent, there is possibility that a few of the images are not perfectly converted to what you want. You are recommended to check the converted image outputs, and select the few unsatisfied images for a re-run.
+AI image transformations may vary between files even when they use the same instruction. Review a small test batch first, then refine the prompt or rerun individual images when needed.
+
+### Project structure
+    .
+    ├── main.py
+    ├── scripts/
+    │   └── run_codex_batch.py
+    ├── skills/
+    │   └── batch-image-converter/
+    │       ├── SKILL.md
+    │       ├── agents/
+    │       └── local/
+    │           ├── run_batch_converter.ps1
+    │           └── run_batch_converter.sh
+    └── utils/
+        └── retrieve.py
+        └── toagent.py
+        └── generate.py
+
+### License
+
+This project is licensed under the MIT License.
